@@ -1,6 +1,6 @@
 # unity_xampp
  unity + xampp 連線至 資料庫 ，製作 登入註冊等功能demo
-![image](https://user-images.githubusercontent.com/50354880/120174575-d2c44500-c237-11eb-9820-f9f839beef30.png)
+![image](https://user-images.githubusercontent.com/50354880/120175216-8b8a8400-c238-11eb-99d9-a13c989251a6.png)
 
 
 userId 代表使用者編號(唯一 )  IteID代表 道具編號  
