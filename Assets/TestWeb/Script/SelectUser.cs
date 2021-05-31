@@ -51,7 +51,7 @@ public class SelectUser : MonoBehaviour
         {
             string usersdatastring = uwr.downloadHandler.text;
             userdata = usersdatastring.Split(';');
-            print(GetValueData(userdata[0], "username :"));
+            print(usersdatastring);
         }
     }
 }

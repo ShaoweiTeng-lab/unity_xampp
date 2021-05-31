@@ -22,7 +22,12 @@ namespace JaosnGameNet
 
 
         }
-
+        /// <summary>
+        /// 連線
+        /// </summary>
+        /// <param name="UserName"></param>
+        /// <param name="Password"></param>
+        /// <returns></returns>
         IEnumerator CorLogin(string UserName, string Password)
         {
 
@@ -39,13 +44,15 @@ namespace JaosnGameNet
                 else
                 {
                     Debug.Log("上傳表單成功");
-
+                    //取得連線資訊
                     SendRequest.text=www.downloadHandler.text;
+                    ///連線後做什麼
                 }
 
             }
 
         }
         
+
     }
 }
