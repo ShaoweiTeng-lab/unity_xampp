@@ -38,7 +38,7 @@ namespace JaosnGameNet
                 }
                 else
                 {
-                    Debug.Log("上傳表單成功");
+                    Debug.Log("Form upload complete!");
 
                     SendRequest.text=www.downloadHandler.text;
                 }
