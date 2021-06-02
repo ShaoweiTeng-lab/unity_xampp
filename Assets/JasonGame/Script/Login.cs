@@ -54,10 +54,14 @@ namespace JaosnGameNet
                     ///連線後做什麼
                     Debug.Log("ID  :  " + www.downloadHandler.text);
                     if (www.downloadHandler.text != "登入錯誤" && www.downloadHandler.text != "使用者 不存在" && www.downloadHandler.text != "請輸入帳密") {//判斷回傳是否成功登入
-                        isLogin = true;
+                        SendRequest.text = "成功登入";
+                       isLogin = true;
                         LoginObj.SetActive(false);
-                        AfterLoginObj.SetActive(true);
+                        AfterLoginObj.SetActive(true); 
                         NetManager.ins.userData = new UserData(UserName, www.downloadHandler.text, Password);
+                        yield return new WaitForSeconds(1.5f); 
+                        SendRequest.gameObject.SetActive(false);
+
                     }
                 } 
             } 

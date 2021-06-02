@@ -72,10 +72,10 @@ namespace JaosnGameNet {
         /// <returns></returns>
         public IEnumerator CorGetItemsInfo(string itemID, System.Action<string> callBack)
         {//輸入 userid得到 該使用者的所有道具
-            string GetItemsIds = "http://localhost/UnityGame_PHP/GetItemID.php";
+            string GetItemsIdsUrl = "http://localhost/UnityGame_PHP/GetItemID.php";
             WWWForm form = new WWWForm();
-            form.AddField("itemID", itemID);
-            using (UnityWebRequest www = UnityWebRequest.Post(GetItemsIds, form))
+            form.AddField("itemid", itemID);
+            using (UnityWebRequest www = UnityWebRequest.Post(GetItemsIdsUrl, form))
             {
                 yield return www.SendWebRequest();
                 if (www.isHttpError || www.isNetworkError)//沒連上網路
@@ -86,6 +86,7 @@ namespace JaosnGameNet {
                 {
                     Debug.Log("上傳表單成功");  
                     string JsonArry = www.downloadHandler.text;//取得item id 
+                    Debug.Log(JsonArry);
                     ///連線後做什麼 
                     callBack(JsonArry);//傳入Json arry並執行
                 }

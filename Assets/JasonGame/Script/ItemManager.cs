@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.UI;
 using System;
 using System.IO; 
 public class ItemManager : MonoBehaviour
 {   //記得先去下載SimpleJSON
     Action<string> ItemCreateCallback;
+    public Transform ItemParent;
     // Start is called before the first frame update
     void Start()
     {   //定義委派方法
@@ -50,6 +52,14 @@ public class ItemManager : MonoBehaviour
             StartCoroutine(JaosnGameNet.NetManager.ins.CorGetItemsInfo(itemId, getIttemInfo));//這裡執行才讓isdone = true ,執行後才可跳至第二迴圈
             yield return new WaitUntil(()=>isDone==true);// 等待isdone 執行完成 傳入必須為委派
 
+            //生成item物件
+            GameObject prefeb = Resources.Load("Prefeb/ItemPrefeb") as GameObject;
+            GameObject item = Instantiate(prefeb);
+            item.transform.SetParent(ItemParent);
+            //放入item資訊
+            item.transform.Find("ItemName").GetComponent<Text>().text =itemInfoJson["Name"] ;
+            item.transform.Find("ItemDetals").GetComponent<Text>().text = itemInfoJson["Description"];
+            item.transform.Find("Price").GetComponent<Text>().text = itemInfoJson["Price"];
         }
 
 
