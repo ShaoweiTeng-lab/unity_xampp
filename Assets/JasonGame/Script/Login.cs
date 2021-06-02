@@ -26,10 +26,7 @@ namespace JaosnGameNet
 
         }
         void Loginfunction() {
-            StartCoroutine(CorLogin(InputUserName.text, InputPassword.text)); 
-          
-
-
+            StartCoroutine(CorLogin(InputUserName.text, InputPassword.text));  
         }
         /// <summary>
         /// 連線
@@ -38,8 +35,7 @@ namespace JaosnGameNet
         /// <param name="Password"></param>
         /// <returns></returns>
         IEnumerator CorLogin(string UserName, string Password)
-        {
-
+        { 
             WWWForm form = new WWWForm();
             form.AddField("loginUser", UserName);
             form.AddField("loginPassword", Password);
@@ -63,51 +59,16 @@ namespace JaosnGameNet
                         AfterLoginObj.SetActive(true);
                         NetManager.ins.userData = new UserData(UserName, www.downloadHandler.text, Password);
                     }
-                }
-
-            }
-
-            if (NetManager.ins.userData != null) {
-                StartCoroutine(GetItemsIds(NetManager.ins.userData.ReturnUserId())); 
-            }
-
+                } 
+            } 
+            } 
         }
 
-        /// <summary>
-        /// 登入後 用 玩家編號 取得該使用者的所有道具
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        IEnumerator GetItemsIds(string userID) {//輸入 userid得到 該使用者的所有道具
-            string GetItemsIds = "http://localhost/UnityGame_PHP/GetUserItem.php"; 
-            WWWForm form = new WWWForm();
-            form.AddField("userId", userID); 
-            using (UnityWebRequest www = UnityWebRequest.Post(GetItemsIds, form))
-            {
-                yield return www.SendWebRequest();
-                if (www.isHttpError || www.isNetworkError)//沒連上網路
-                {
-                    Debug.Log(www.error);
-                }
-                else
-                {
-                    Debug.Log("上傳表單成功");
-                    //取得連線資訊
-                   // Debug.Log( www.downloadHandler.text);
-
-                    string JsonArry = www.downloadHandler.text;
-                    Debug.Log(JsonArry);
-                    ///連線後做什麼
-                    ///
-                }
-
-            }
-
-        }
+      
         
 
     }
-}
+
 /// <summary>
 /// 使用者所有資訊存成class
 /// </summary>
