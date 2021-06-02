@@ -31,14 +31,15 @@ public class ItemManager : MonoBehaviour
     //得到json 後座的事情
     IEnumerator CreateItemRoutine(string jsonArryString) {
         //解析Json arry 轉成 arry 
+        //Debug.Log("jsonArryString :  "+jsonArryString);
         SimpleJSON.JSONArray jsonArry = SimpleJSON.JSON.Parse(jsonArryString) as SimpleJSON.JSONArray;
-        
+       
         for (int i = 0; i < jsonArry.Count; i++)
         {
-            bool isDone = false; ;//判斷是不是下載中
+            bool isDone = false; //判斷是不是下載中
             //根據  ItemId(key) 抓取 value ,此作用為 輸入userId得到一組 Json 陣列然後 拆解成兩個object 然後 根據 AsObject["key"] 抓取 value
             string itemId = jsonArry[i].AsObject["ItemId"];
-            Debug.Log(itemId);
+            //Debug.Log(itemId);
             //定義一個jsonobj 負責裝 NetManager調用的訊息
             SimpleJSON.JSONObject itemInfoJson = new SimpleJSON.JSONObject();
 
@@ -48,10 +49,10 @@ public class ItemManager : MonoBehaviour
                 SimpleJSON.JSONArray tempArry = SimpleJSON.JSON.Parse(itemInfo) as SimpleJSON.JSONArray;
                 itemInfoJson = tempArry[0].AsObject; 
             };
-
+           
             StartCoroutine(JaosnGameNet.NetManager.ins.CorGetItemsInfo(itemId, getIttemInfo));//這裡執行才讓isdone = true ,執行後才可跳至第二迴圈
             yield return new WaitUntil(()=>isDone==true);// 等待isdone 執行完成 傳入必須為委派
-
+           // Debug.Log("itemInfoJson : " + itemInfoJson.Count);
             //生成item物件
             GameObject prefeb = Resources.Load("Prefeb/ItemPrefeb") as GameObject;
             GameObject item = Instantiate(prefeb);

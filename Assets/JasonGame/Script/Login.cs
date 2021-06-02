@@ -48,20 +48,20 @@ namespace JaosnGameNet
                 }
                 else
                 {
-                    Debug.Log("上傳表單成功");
-                    //取得連線資訊
+                    //Debug.Log("上傳表單成功");
                     SendRequest.text = www.downloadHandler.text;
                     ///連線後做什麼
-                    Debug.Log("ID  :  " + www.downloadHandler.text);
+                    //Debug.Log("ID  :  " + www.downloadHandler.text);
                     if (www.downloadHandler.text != "登入錯誤" && www.downloadHandler.text != "使用者 不存在" && www.downloadHandler.text != "請輸入帳密") {//判斷回傳是否成功登入
                         SendRequest.text = "成功登入";
-                       isLogin = true;
-                        LoginObj.SetActive(false);
-                        AfterLoginObj.SetActive(true); 
                         NetManager.ins.userData = new UserData(UserName, www.downloadHandler.text, Password);
+                        isLogin = true;
+                        LoginObj.SetActive(false);
+                        AfterLoginObj.SetActive(true);  
+                        StartCoroutine(NetManager.ins.CorGetUserDataInfo(UserName));
                         yield return new WaitForSeconds(1.5f); 
                         SendRequest.gameObject.SetActive(false);
-
+                       
                     }
                 } 
             } 
@@ -72,56 +72,3 @@ namespace JaosnGameNet
         
 
     }
-
-/// <summary>
-/// 使用者所有資訊存成class
-/// </summary>
-[SelectionBase]
-public class UserData {
-    [SerializeField]
-    string UserName;
-    [SerializeField]
-    string UserID;
-    [SerializeField]
-    string UserPassword;
-    [SerializeField]
-    int UserCoins;
-    [SerializeField]
-    int Level; 
-    public UserData(string UserName, string UserId, string UserPassword)
-    {
-        this.UserName = UserName;
-        this.UserID = UserId;
-        this.UserPassword = UserPassword;
-        
-    }
-    public void ChangeInfo(string UserName, string UserPassword) {
-        this.UserName = UserName;
-        this.UserPassword = UserPassword;
-    }
-    public string ReturnUserId() {
-        return UserID;
-    
-    }
-    public string ReturnUserName()
-    {
-        return UserName; 
-    }
-    public string ReturnUserPasswordd()
-    {
-        return UserPassword;
-
-    }
-    public int ReturnUserCoins()
-    {
-        return UserCoins;
-
-    }
-    public int ReturnLevel()
-    {
-        return Level;
-
-    }
-
-
-}

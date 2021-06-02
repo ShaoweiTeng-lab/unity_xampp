@@ -1653,6 +1653,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   userLogin: {fileID: 0}
+  userGameObject: {fileID: 1955460382}
 --- !u!1 &1431066195
 GameObject:
   m_ObjectHideFlags: 0
@@ -1804,8 +1805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57efe14954d57b447b7d2f4210f95159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemParent: {fileID: 547802039677032943, guid: 2bd98c265ae819c4390d2ef81692d380,
-    type: 3}
+  ItemParent: {fileID: 1442307733}
 --- !u!1 &1477781831
 GameObject:
   m_ObjectHideFlags: 0
