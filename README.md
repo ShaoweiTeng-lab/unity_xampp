@@ -36,3 +36,15 @@ UML 圖:
 
 ![image](https://user-images.githubusercontent.com/50354880/120174759-0901c480-c238-11eb-9b9f-6c3e20931edf.png)
 
+SimpleJSON
+
+相關參考文件:http://wiki.unity3d.com/index.php/SimpleJSON
+
+使用方式:
+
+於Unity中加上SimpleJSON.cs
+
+var N = JSON.Parse(the_JSON_string);
+
+var versionString = N["keyword"]
+
