@@ -33,37 +33,49 @@ public class ItemManager : MonoBehaviour
         //解析Json arry 轉成 arry 
         //Debug.Log("jsonArryString :  "+jsonArryString);
         SimpleJSON.JSONArray jsonArry = SimpleJSON.JSON.Parse(jsonArryString) as SimpleJSON.JSONArray;
-       
-        for (int i = 0; i < jsonArry.Count; i++)
+        if (jsonArry != null)
         {
-            bool isDone = false; //判斷是不是下載中
-            //根據  ItemId(key) 抓取 value ,此作用為 輸入userId得到一組 Json 陣列然後 拆解成兩個object 然後 根據 AsObject["key"] 抓取 value
-            string itemId = jsonArry[i].AsObject["ItemId"];
-            //Debug.Log(itemId);
-            //定義一個jsonobj 負責裝 NetManager調用的訊息
-            SimpleJSON.JSONObject itemInfoJson = new SimpleJSON.JSONObject();
+            for (int i = 0; i < jsonArry.Count; i++)
+            {
+                bool isDone = false; //判斷是不是下載中
+                                     //根據  ItemId(key) 抓取 value ,此作用為 輸入userId得到一組 Json 陣列然後 拆解成兩個object 然後 根據 AsObject["key"] 抓取 value
+                string itemId = jsonArry[i].AsObject["ItemId"];
+                //Debug.Log(itemId);
+                //定義一個jsonobj 負責裝 NetManager調用的訊息
+                SimpleJSON.JSONObject itemInfoJson = new SimpleJSON.JSONObject();
 
-            //定義一個 callback 區域方法從 NetManager調用 item的資訊 (name 說明等等)
-            Action<string> getIttemInfo = (itemInfo) => {
-                isDone = true;//資料傳遞進來了
-                SimpleJSON.JSONArray tempArry = SimpleJSON.JSON.Parse(itemInfo) as SimpleJSON.JSONArray;
-                itemInfoJson = tempArry[0].AsObject; 
-            };
-           
-            StartCoroutine(JaosnGameNet.NetManager.ins.CorGetItemsInfo(itemId, getIttemInfo));//這裡執行才讓isdone = true ,執行後才可跳至第二迴圈
-            yield return new WaitUntil(()=>isDone==true);// 等待isdone 執行完成 傳入必須為委派
-           // Debug.Log("itemInfoJson : " + itemInfoJson.Count);
-            //生成item物件
-            GameObject prefeb = Resources.Load("Prefeb/ItemPrefeb") as GameObject;
-            GameObject item = Instantiate(prefeb);
-            item.transform.SetParent(ItemParent);
-            //放入item資訊
-            item.transform.Find("ItemName").GetComponent<Text>().text =itemInfoJson["Name"] ;
-            item.transform.Find("ItemDetals").GetComponent<Text>().text = itemInfoJson["Description"];
-            item.transform.Find("Price").GetComponent<Text>().text = itemInfoJson["Price"];
+                //定義一個 callback 區域方法從 NetManager調用 item的資訊 (name 說明等等)
+                Action<string> getIttemInfo = (itemInfo) =>
+                {
+                    isDone = true;//資料傳遞進來了
+                    SimpleJSON.JSONArray tempArry = SimpleJSON.JSON.Parse(itemInfo) as SimpleJSON.JSONArray;
+                    itemInfoJson = tempArry[0].AsObject;
+                };
+
+                StartCoroutine(JaosnGameNet.NetManager.ins.CorGetItemsInfo(itemId, getIttemInfo));//這裡執行才讓isdone = true ,執行後才可跳至第二迴圈
+                yield return new WaitUntil(() => isDone == true);// 等待isdone 執行完成 傳入必須為委派
+                                                                 // Debug.Log("itemInfoJson : " + itemInfoJson.Count);
+                                                                 //生成item物件
+                GameObject prefeb = Resources.Load("Prefeb/ItemPrefeb") as GameObject;
+                GameObject item = Instantiate(prefeb);
+                item.transform.SetParent(ItemParent);
+                //放入item資訊
+                item.transform.Find("ItemName").GetComponent<Text>().text = itemInfoJson["Name"];
+                item.transform.Find("ItemDetals").GetComponent<Text>().text = itemInfoJson["Description"];
+                item.transform.Find("Price").GetComponent<Text>().text = itemInfoJson["Price"];
+
+                string itemid = itemId;
+                string userID= JaosnGameNet.NetManager.ins.userData.ReturnUserId();
+                //定義賣出 button
+                item.transform.Find("Sell").GetComponent<Button>().onClick.AddListener(() => { 
+                    StartCoroutine(JaosnGameNet.NetManager.ins.CorSellItem(itemid, userID));
+                    //執行完更新
+                    StartCoroutine(JaosnGameNet.NetManager.ins.CorGetUserDataInfo(JaosnGameNet.NetManager.ins.userData.ReturnUserName()));
+                    item.gameObject.SetActive(false);
+                });
+            }
+
         }
-
-
         yield return null;
     
     }

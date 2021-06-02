@@ -141,6 +141,41 @@ namespace JaosnGameNet
 
         }
         #endregion
+
+
+        /// <summary>
+        /// 刪除道具
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public IEnumerator CorSellItem(string itemId,string userId)
+        {
+            string SellItemUrl = "http://localhost/UnityGame_PHP/SellItm.php";
+            WWWForm form = new WWWForm();
+            form.AddField("itemId", itemId);
+            form.AddField("userId", userId);
+            bool isupdate = false;
+            using (UnityWebRequest www = UnityWebRequest.Post(SellItemUrl, form))
+            {
+                yield return www.SendWebRequest();
+                isupdate = true;
+                if (www.isHttpError || www.isNetworkError)//沒連上網路
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    yield return new WaitUntil(() => isupdate == true); 
+                    StartCoroutine(CorGetUserDataInfo(userData.ReturnUserName()));//更新所有資料
+
+                }
+
+            }
+
+
+
+        }
     }
 
 }
