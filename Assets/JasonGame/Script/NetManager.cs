@@ -29,7 +29,7 @@ namespace JaosnGameNet
         // Update is called once per frame
         void Update()
         {
-             
+
         }
 
         #region 登入後取得玩家編號
@@ -127,11 +127,11 @@ namespace JaosnGameNet
                     SimpleJSON.JSONArray jsonArry = SimpleJSON.JSON.Parse(JsonArry) as SimpleJSON.JSONArray;
                     //Debug.Log("jsonArry count : " +jsonArry.Count);
                     //定義一個jsonobj
-                    SimpleJSON.JSONObject UserInfoJson = new SimpleJSON.JSONObject(); 
+                    SimpleJSON.JSONObject UserInfoJson = new SimpleJSON.JSONObject();
                     UserInfoJson = jsonArry[0].AsObject;//將arry放入obj
                     //Debug.Log("UserInfoJson count: "+UserInfoJson.Count);
                     //放入item資訊
-                    userGameObject.transform.Find("UserName").GetComponent<Text>().text = "Name : "+UserInfoJson["username"];
+                    userGameObject.transform.Find("UserName").GetComponent<Text>().text = "Name : " + UserInfoJson["username"];
                     userGameObject.transform.Find("Level").GetComponent<Text>().text = "Level : " + UserInfoJson["Level"];
                     userGameObject.transform.Find("UserCoint").GetComponent<Text>().text = "Coins : " + UserInfoJson["coins"];
                 }
@@ -148,11 +148,11 @@ namespace JaosnGameNet
         /// <param name="userId"></param>
         /// <returns></returns>
         ///抓 itemid 會有重複 因為 玩家可以有重複道具 所以必須抓唯一值(流水號)
-        public IEnumerator CorSellItem(string onlyId, string userID, string itemId )//防止玩家刪掉瞭個一樣的道具(玩家有兩個相同道具的情況下)
+        public IEnumerator CorSellItem(string onlyId, string userID, string itemId)//防止玩家刪掉瞭個一樣的道具(玩家有兩個相同道具的情況下)
         {
             string SellItemUrl = "http://localhost/UnityGame_PHP/SellItm.php";
             WWWForm form = new WWWForm();
-            Debug.Log(onlyId + " " + userID + " " + itemId);
+            //Debug.Log(onlyId + " " + userID + " " + itemId);
             form.AddField("userId", userID);
             form.AddField("onlyId", onlyId);
             form.AddField("itemId", itemId);
@@ -167,7 +167,7 @@ namespace JaosnGameNet
                 }
                 else
                 {
-                    yield return new WaitUntil(() => isupdate == true); 
+                    yield return new WaitUntil(() => isupdate == true);
                     StartCoroutine(CorGetUserDataInfo(userData.ReturnUserName()));//更新所有資料
                     Debug.Log(www.downloadHandler.text);
                 }
@@ -177,10 +177,39 @@ namespace JaosnGameNet
 
 
         }
- 
+
+
+        /// <summary>
+        /// 拿道具圖片
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator CorGetItemImage(string itemid, Action<Sprite> imageaction)
+        {
+            string ImageUrl = "http://localhost/UnityGame_PHP/GetItemIcon.php";
+            WWWForm form = new WWWForm();
+            form.AddField("itemid", itemid);
+
+            using (UnityWebRequest www = UnityWebRequest.Post(ImageUrl, form))
+            {
+                yield return www.SendWebRequest();
+                if (www.isHttpError || www.isNetworkError)//沒連上網路
+                {
+                    Debug.Log(www.error);
+                }
+                else {
+                    byte[] bytes = www.downloadHandler.data;
+                    Texture2D texture= new Texture2D(2, 2);
+                    texture.LoadImage(bytes);
+                    //創建sprite   pivot =錨點 通常為 0.5 0.5 代表中間
+                    Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width,texture.height),new Vector2(.5f,.5f));
+                    imageaction(sprite);
+                }
+
+            }
+        }
     }
-    
-   
+
+
 }
 
 

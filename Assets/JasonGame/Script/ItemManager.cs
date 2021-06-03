@@ -77,6 +77,12 @@ public class ItemManager : MonoBehaviour
                     
                     item.gameObject.SetActive(false);
                 });
+
+                //放入image
+                Action<Sprite> setImage = (itemImageSprite) => {
+                    item.transform.Find("ItemImage").GetComponent<Image>().sprite = itemImageSprite; 
+                };
+                StartCoroutine(JaosnGameNet.NetManager.ins.CorGetItemImage(itemId, setImage));
             }
 
         }
