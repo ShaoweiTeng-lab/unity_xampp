@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 namespace JaosnGameNet
 {
     public class NetManager : MonoBehaviour
@@ -28,7 +29,7 @@ namespace JaosnGameNet
         // Update is called once per frame
         void Update()
         {
-
+             
         }
 
         #region 登入後取得玩家編號
@@ -56,7 +57,7 @@ namespace JaosnGameNet
                     // Debug.Log( www.downloadHandler.text);
 
                     string JsonArry = www.downloadHandler.text;//取得玩家 編號
-                    Debug.Log(JsonArry);
+                    //Debug.Log(JsonArry);
                     ///連線後做什麼
 
 
@@ -128,7 +129,7 @@ namespace JaosnGameNet
                     //定義一個jsonobj
                     SimpleJSON.JSONObject UserInfoJson = new SimpleJSON.JSONObject(); 
                     UserInfoJson = jsonArry[0].AsObject;//將arry放入obj
-                    Debug.Log("UserInfoJson count: "+UserInfoJson.Count);
+                    //Debug.Log("UserInfoJson count: "+UserInfoJson.Count);
                     //放入item資訊
                     userGameObject.transform.Find("UserName").GetComponent<Text>().text = "Name : "+UserInfoJson["username"];
                     userGameObject.transform.Find("Level").GetComponent<Text>().text = "Level : " + UserInfoJson["Level"];
@@ -136,9 +137,6 @@ namespace JaosnGameNet
                 }
 
             }
-
-
-
         }
         #endregion
 
@@ -149,12 +147,15 @@ namespace JaosnGameNet
         /// <param name="itemId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public IEnumerator CorSellItem(string itemId,string userId)
+        ///抓 itemid 會有重複 因為 玩家可以有重複道具 所以必須抓唯一值(流水號)
+        public IEnumerator CorSellItem(string onlyId, string userID, string itemId )//防止玩家刪掉瞭個一樣的道具(玩家有兩個相同道具的情況下)
         {
             string SellItemUrl = "http://localhost/UnityGame_PHP/SellItm.php";
             WWWForm form = new WWWForm();
+            Debug.Log(onlyId + " " + userID + " " + itemId);
+            form.AddField("userId", userID);
+            form.AddField("onlyId", onlyId);
             form.AddField("itemId", itemId);
-            form.AddField("userId", userId);
             bool isupdate = false;
             using (UnityWebRequest www = UnityWebRequest.Post(SellItemUrl, form))
             {
@@ -168,7 +169,7 @@ namespace JaosnGameNet
                 {
                     yield return new WaitUntil(() => isupdate == true); 
                     StartCoroutine(CorGetUserDataInfo(userData.ReturnUserName()));//更新所有資料
-
+                    Debug.Log(www.downloadHandler.text);
                 }
 
             }
@@ -176,8 +177,10 @@ namespace JaosnGameNet
 
 
         }
+ 
     }
-
+    
+   
 }
 
 
