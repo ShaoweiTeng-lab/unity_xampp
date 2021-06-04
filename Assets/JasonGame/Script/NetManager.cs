@@ -140,7 +140,7 @@ namespace JaosnGameNet
         }
         #endregion
 
-
+        #region 刪除道具
         /// <summary>
         /// 刪除道具
         /// </summary>
@@ -177,13 +177,15 @@ namespace JaosnGameNet
 
 
         }
-
-
+        #endregion
+        #region 拿道具圖片
         /// <summary>
         /// 拿道具圖片
         /// </summary>
+        /// <param name="itemid"></param>
+        /// <param name="imageaction"></param>
         /// <returns></returns>
-        public IEnumerator CorGetItemImage(string itemid, Action<Sprite> imageaction)
+        public IEnumerator CorGetItemImage(string itemid, Action<Sprite> imageActionCallback)
         {
             string ImageUrl = "http://localhost/UnityGame_PHP/GetItemIcon.php";
             WWWForm form = new WWWForm();
@@ -202,11 +204,15 @@ namespace JaosnGameNet
                     texture.LoadImage(bytes);
                     //創建sprite   pivot =錨點 通常為 0.5 0.5 代表中間
                     Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width,texture.height),new Vector2(.5f,.5f));
-                    imageaction(sprite);
+                    imageActionCallback(sprite);
+                    //下載圖片至本基端
+                    ImageManager.ins.SaveImage(itemid, bytes);
+
                 }
 
             }
         }
+        #endregion
     }
 
 

@@ -79,6 +79,7 @@ public class ItemManager : MonoBehaviour
                 });
 
                 //放入image
+                //定義委派
                 Action<Sprite> setImage = (itemImageSprite) => {
                     item.transform.Find("ItemImage").GetComponent<Image>().sprite = itemImageSprite; 
                 };
