@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using System;
+using UnityEngine.UI;
 using System.IO;
 public class ImageManager : MonoBehaviour
 {   //持續更新圖片
@@ -12,7 +13,7 @@ public class ImageManager : MonoBehaviour
     //3.載入圖片方法
     //4.get 圖片
     public static ImageManager ins;
-    string basePth;
+    string basePth;// 預設位置 C:/Users/s1051/AppData/LocalLow/Unity_Xmpp/Unity_Xmpp
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +48,8 @@ public class ImageManager : MonoBehaviour
     public  void SaveImage(string name, byte[] ImageBytes)
     {
         Debug.Log(basePth + name);
-        File.WriteAllBytes(basePth + name, ImageBytes);
+        File.WriteAllBytes(basePth + name+".png", ImageBytes);
+     
 
     }
     public byte[] LoadImage(string name)

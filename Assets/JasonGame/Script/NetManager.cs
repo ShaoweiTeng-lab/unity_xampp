@@ -134,6 +134,7 @@ namespace JaosnGameNet
                     userGameObject.transform.Find("UserName").GetComponent<Text>().text = "Name : " + UserInfoJson["username"];
                     userGameObject.transform.Find("Level").GetComponent<Text>().text = "Level : " + UserInfoJson["Level"];
                     userGameObject.transform.Find("UserCoint").GetComponent<Text>().text = "Coins : " + UserInfoJson["coins"];
+                    userData.SetData(UserInfoJson["username"], UserInfoJson["id"], UserInfoJson["password"], int.Parse(UserInfoJson["coins"]), int.Parse(UserInfoJson["Level"]));
                 }
 
             }
@@ -222,7 +223,7 @@ namespace JaosnGameNet
 /// <summary>
 /// 使用者所有資訊存成class
 /// </summary>
-[SelectionBase]
+[System.Serializable]
 public class UserData
 {
     [SerializeField]
@@ -240,6 +241,16 @@ public class UserData
         this.UserName = UserName;
         this.UserID = UserId;
         this.UserPassword = UserPassword;
+
+    }
+    public void SetData(string username, string UserID, string UserPassword, int UserCoins,int Level)
+    {
+        this.UserName = username;
+        this.UserID = UserID;
+        this.UserPassword = UserPassword;
+        this.UserCoins = UserCoins;
+        this.Level = Level;
+         
 
     }
     public void ChangeInfo(string UserName, string UserPassword)
@@ -271,6 +282,7 @@ public class UserData
         return Level;
 
     }
+  
 
 
 }
