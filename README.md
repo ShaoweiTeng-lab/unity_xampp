@@ -48,3 +48,8 @@ var N = JSON.Parse(the_JSON_string);
 
 var versionString = N["keyword"]
 
+JSON 格式
+
+![image](https://user-images.githubusercontent.com/50354880/120775234-99504a00-c555-11eb-9cce-0845e13e4ec6.png)
+
+
